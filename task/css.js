@@ -7,23 +7,23 @@ const app = require("../config/app.js");
 //gulp plugins
 const plumber = require("gulp-plumber");
 const notify = require("gulp-notify");
-const fileInclude = require("gulp-file-include");
-const htmlmin = require("gulp-htmlmin");
+const concat = require("gulp-concat");
+const cssImport = require("gulp-cssimport");
 
-const html = () => {
+const css = () => {
   return gulp
-    .src(path.html.src)
+    .src(path.css.src, { sourcemaps: true })
     .pipe(
       plumber({
         errorHandler: notify.onError((error) => ({
-          title: "HTML",
+          title: "CSS",
           message: error.message,
         })),
       })
     )
-    .pipe(fileInclude())
-    .pipe(htmlmin(app.htmlmin))
-    .pipe(gulp.dest(path.html.dest));
+    .pipe(concat("main.css"))
+    .pipe(cssImport())
+    .pipe(gulp.dest(path.css.dest, { sourcemaps: true }));
 };
 
-module.exports = html;
+module.exports = css;
